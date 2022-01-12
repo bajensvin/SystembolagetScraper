@@ -3,6 +3,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -58,20 +59,25 @@ namespace Scraper
                 var beerListDoc = new HtmlDocument();
                 beerListDoc.LoadHtml(driver.PageSource);
                 var beerlist = beerListDoc.DocumentNode.SelectNodes("/html/body/div[1]/div[2]/main/div[2]/div/div/div/div[2]/div[4]");
-                var beers = beerlist.Select(x => x.SelectNodes(".//a[contains(@href, 'produkt/ol')]")).First();
+                var beersNodes = beerlist.Select(x => x.SelectNodes(".//a[contains(@href, 'produkt/ol')]")).First();
 
-                foreach (var beer in beers)
+                var beers = new List<Beer>();
+
+                foreach (var beer in beersNodes)
                 {
-                    var bla = new Beer
+                    beers.Add(new Beer
                     {
                         Name = beer.SelectSingleNode("//div/div/div[3]/div/div/div/div/h3").InnerText,
                         Type = beer.SelectSingleNode("//div/div/div[3]/div/div/div/h4").InnerText,
                         Description = beer.SelectSingleNode("//div/div/div[3]/div/div/div[2]/div[1]").InnerText,
                         Country = beer.SelectSingleNode("//div/div/div[3]/div/div/div/div[1]/span[2]").InnerText,
-                        Size = beer.SelectSingleNode("//div/div/div[3]/div[2]/div[1]/div[2]").InnerText,
+                        Size = beer.SelectSingleNode("//div/div/div[3]/div[2]/div[1]/div[2]").InnerText
                         //Price = Convert.ToDecimal(beer.SelectSingleNode("//div/div/div[3]/div[2]/div[3]/span[1]"), CultureInfo.CurrentCulture)
-                    };
+                        //Need to get info about the date for the release this item is included in
+                    });
                 }
+
+                //Save beer entries to db
             }
 
             driver.Quit();
