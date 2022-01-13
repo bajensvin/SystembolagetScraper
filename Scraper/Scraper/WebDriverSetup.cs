@@ -9,8 +9,9 @@ namespace Scraper
 {
     public class WebDriverSetup
     {
-        private readonly string _url;
+        public readonly string _url;
         private readonly ChromeDriver _driver;
+        
         public WebDriverSetup()
         {
             var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
