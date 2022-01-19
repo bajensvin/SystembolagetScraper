@@ -4,6 +4,7 @@ namespace Scraper.Models
 {
     public class Beer
     {
+        public int Id { get; set; }
         public DateTime ReleaseDate { get; set; }
         public string ReleaseType { get; set; }
         public Uri DetailPageLink { get; set; }
