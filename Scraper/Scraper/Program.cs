@@ -77,7 +77,6 @@ namespace Scraper
                         }
                         catch (Exception e)
                         {
-                            _logger.Error(e);
                             break;
                         }
                     }
