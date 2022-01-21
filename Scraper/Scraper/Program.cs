@@ -19,7 +19,7 @@ namespace Scraper
 {
     class Program
     {
-        private static Logger _logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static HttpClient _client;
         public Program()
         {
@@ -75,7 +75,7 @@ namespace Scraper
                             showMoreButton.Click();
                             showMoreButton = driver.FindElement(showMoreButtonSelector);
                         }
-                        catch (Exception e)
+                        catch (Exception)
                         {
                             break;
                         }
@@ -109,13 +109,17 @@ namespace Scraper
                         }
                         catch(Exception e)
                         {
-                            _logger.Error(e);
+                            Logger.Error(e);
                             throw new Exception(e.StackTrace);
                         }
                     }
                 }
 
-                await PostBeerData(beers);
+                if (beers.Any())
+                {
+                    await PostBeerData(beers);
+                }
+                
             }
             driver.Quit();
         }
